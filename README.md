@@ -106,7 +106,7 @@ Each output file includes:
 You can set a custom output file using the `-o` or `--output` flag:
 
 ```bash
-./grepr -i input.txt -ft js,php -o my-matches.txt
+./grepr -i input.txt -f js,php -o my-matches.txt
 ```
 
 > 📌 Note: This applies to standard filtering. Soora Super Mode always generates predefined output files for clarity and consistency.
