@@ -37,6 +37,10 @@ func Run(input string) error {
 	allFiles := []string{jsOut, txtOut, extOut, regexOut}
 	filter.MergeAndDedupe(allFiles, finalOut)
 
+	fmt.Println("[✓] Soora mode complete: All-Js-Grepr.txt generated.")
+	fmt.Println("[✓] Soora mode complete: All-Text-Grepr.txt generated.")
+	fmt.Println("[✓] Soora mode complete: Special-Files-Grepr.txt generated.")
+	fmt.Println("[✓] Soora mode complete: Special-Regex-Grepr.txt generated.")
 	fmt.Println("[✓] Soora mode complete: Final-Grepr.txt generated.")
 	return nil
 }

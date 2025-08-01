@@ -59,6 +59,7 @@ func MultiRegex(inputFile string, patterns []string, outputFile string) error {
 	// Compile all regex patterns
 	var regexes []*regexp.Regexp
 	for _, p := range patterns {
+		fmt.Printf("[DEBUG] Compiling pattern: '%s'\n", p)
 		r, err := regexp.Compile(p)
 		if err != nil {
 			fmt.Printf("[!] Skipping invalid regex: %s\n", p)
@@ -69,12 +70,17 @@ func MultiRegex(inputFile string, patterns []string, outputFile string) error {
 
 	for scanner.Scan() {
 		line := scanner.Text()
+		matched := false
 		for _, r := range regexes {
 			if r.MatchString(line) {
+				fmt.Printf("[MATCH] Line: %s | Regex: %s\n", line, r.String())
 				writer.WriteString(line + "\n")
-				fmt.Printf("%v\n", line)
+				matched = true
 				break
 			}
+		}
+		if !matched {
+			// fmt.Printf("[NO MATCH] Line: %s\n", line)
 		}
 	}
 
