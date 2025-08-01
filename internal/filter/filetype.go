@@ -2,7 +2,6 @@ package filter
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"regexp"
 	"strings"
@@ -31,7 +30,7 @@ func ByFileType(input string, types []string, output string) error {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if re.MatchString(line) {
-			fmt.Printf("%v\n", line)
+			// fmt.Printf("%v\n", line)
 			writer.WriteString(line + "\n")
 		}
 	}

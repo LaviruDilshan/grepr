@@ -3,7 +3,7 @@
 Grepr is a blazing-fast, lightweight CLI tool designed for **URL filtering and recon**, built specifically for **bug bounty hunters**, **penetration testers**, and **automation workflows**. Inspired by the simplicity of `grep`, Grepr adds targeted intelligence to filter URLs by **file type**, **regex patterns**, or **super mode automation**.
 
 <p align="center">
-  <img src="demo.gif" alt="Grepr demo" width="600">
+  <img src="assets/grepr-demo.gif" alt="Grepr demo" width="600">
 </p>
 
 ---
@@ -55,33 +55,61 @@ Or download the prebuilt binary (coming soon 👀)
 
 ## 🧠 Soora Super Mode
 
-Soora is a built-in, intelligent mode that:
+**Soora** is a built-in intelligent mode that performs deep filtering with minimal effort. It:
 
-* Filters common sensitive filetypes
-* Applies regex patterns for juicy paths
-* Searches for known keywords like `admin`, `login`, `config`, etc.
+* 🔎 Filters common sensitive file types like `.js`, `.txt`, `.env`, etc.
+* 🧬 Applies regex patterns to detect potential secrets and sensitive paths
+* 🧠 Searches for known keywords such as `admin`, `login`, `config`, `key`, etc.
+* 📂 Automatically generates intermediate results and merges them into a final deduplicated file
+
+### 🛠️ Usage
 
 ```bash
 ./grepr -i all-urls.txt -s
 ```
 
-All filtered results will be saved as multiple intermediate files and a final merged output:
-`Final-Grepr.txt`
+### 📁 Output Files
+
+Soora generates the following files during its filtering process:
+
+```
+[✓] Soora mode complete: All-Js-Grepr.txt generated.
+[✓] Soora mode complete: All-Text-Grepr.txt generated.
+[✓] Soora mode complete: Special-Files-Grepr.txt generated.
+[✓] Soora mode complete: Special-Regex-Grepr.txt generated.
+[✓] Soora mode complete: Final-Grepr.txt generated.
+```
+
+The final, deduplicated, and most filtered result will be available in:
+
+```
+📄 Final-Grepr.txt
+```
 
 ---
 
 ## 📂 Output Structure
 
-Each filter writes a separate file:
+Each filter writes results into separate files for easier analysis:
 
-* `output-filetypes-Grepr.txt`
-* `output-regexes-Grepr.txt`
-* `Final-Grepr.txt` *(when Soora mode is used)*
+* `output-filetypes-Grepr.txt` – Matches based on selected file types
+* `output-regexes-Grepr.txt` – Matches using provided regex patterns
+* `Final-Grepr.txt` – *(Generated only in Soora Super Mode)* Final deduplicated result
 
-Each file output includes:
+Each output file includes:
 
 * ✅ Total matched lines
-* 📦 Output file size (KB)
+* 📦 Output file size (in KB)
+
+### 📝 Custom Output Path
+
+You can set a custom output file using the `-o` or `--output` flag:
+
+```bash
+./grepr -i input.txt -ft js,php -o my-matches.txt
+```
+
+> 📌 Note: This applies to standard filtering. Soora Super Mode always generates predefined output files for clarity and consistency.
 
 ---
 

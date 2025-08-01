@@ -42,25 +42,49 @@ var rootCmd = &cobra.Command{
 			return
 		}
 
-		if fileTypes != "" {
+		// Case 1: Filetype + Regex (combo filtering)
+		if fileTypes != "" && (regexFile != "" || regexList != "") {
 			types := strings.Split(fileTypes, ",")
-			ftOutput := strings.TrimSuffix(outputFile, ".txt") + "-filetypes-Grepr.txt"
-
+			ftOutput := strings.TrimSuffix(outputFile, ".txt") + "-Grepr.txt"
 			err := filter.ByFileType(inputFile, types, ftOutput)
 			if err != nil {
 				fmt.Printf("Error filtering by file type: %v\n", err)
 				os.Exit(1)
-			} else {
-				lineCount, sizeKB, err := utils.GetFileStats(ftOutput)
-				if err != nil {
-					fmt.Printf("Error getting file stats: %v\n", err)
-					os.Exit(1)
-				}
-				fmt.Printf("[✓] Filetype filtered results written to: %s (%d lines, %.2f KB)\n", ftOutput, lineCount, sizeKB)
 			}
+
+			patterns, err := filter.LoadRegexPatterns(regexFile, regexList)
+			if err != nil {
+				fmt.Printf("Failed to load regex patterns: %v\n", err)
+				os.Exit(1)
+			}
+
+			finalOut := strings.TrimSuffix(outputFile, ".txt") + "-Grepr.txt"
+			err = filter.MultiRegex(ftOutput, patterns, finalOut)
+			if err != nil {
+				fmt.Printf("Multi-regex filtering failed: %v\n", err)
+				os.Exit(1)
+			} else {
+				lineCount, sizeKB, _ := utils.GetFileStats(finalOut)
+				fmt.Printf("[✓] Filtered results (filetype + regex) → %s (%d lines, %.2f KB)\n", finalOut, lineCount, sizeKB)
+			}
+			return
 		}
 
-		// New multiple-regex filtering (via file + list)
+		// Case 2: Only Filetypes
+		if fileTypes != "" {
+			types := strings.Split(fileTypes, ",")
+			err := filter.ByFileType(inputFile, types, outputFile)
+			if err != nil {
+				fmt.Printf("Filetype filtering failed: %v\n", err)
+				os.Exit(1)
+			} else {
+				lineCount, sizeKB, _ := utils.GetFileStats(outputFile)
+				fmt.Printf("[✓] Filetype filtered output → %s (%d lines, %.2f KB)\n", outputFile, lineCount, sizeKB)
+			}
+			return
+		}
+
+		// Case 3: Only Regexes
 		if regexFile != "" || regexList != "" {
 			patterns, err := filter.LoadRegexPatterns(regexFile, regexList)
 			if err != nil {
@@ -68,24 +92,19 @@ var rootCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			out := strings.TrimSuffix(outputFile, ".txt") + "-regexes-Grepr.txt"
-			err = filter.MultiRegex(inputFile, patterns, out)
+			err = filter.MultiRegex(inputFile, patterns, outputFile)
 			if err != nil {
-				fmt.Printf("Multi-regex filtering failed: %v\n", err)
+				fmt.Printf("Regex filtering failed: %v\n", err)
 				os.Exit(1)
 			} else {
-				lineCount, sizeKB, err := utils.GetFileStats(out)
-				if err != nil {
-					fmt.Printf("Error getting file stats: %v\n", err)
-					os.Exit(1)
-				}
-				fmt.Printf("[✓] Multi-regex filtered lines written to: %s (%d lines, %.2f KB)\n", out, lineCount, sizeKB)
+				lineCount, sizeKB, _ := utils.GetFileStats(outputFile)
+				fmt.Printf("[✓] Regex filtered output → %s (%d lines, %.2f KB)\n", outputFile, lineCount, sizeKB)
 			}
+			return
 		}
 
-		if fileTypes == "" && regexFile == "" && regexList == "" {
-			fmt.Println("[!] No filters applied. Use --filetypes, --keywords-file, or --keywords to filter data.")
-		}
+		// No valid flags used
+		fmt.Println("[!] No filters applied. Use --filetypes, --regex-file, or --regex-list to filter data.")
 	},
 }
 

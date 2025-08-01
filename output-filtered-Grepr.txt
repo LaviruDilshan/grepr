@@ -1,0 +1,3 @@
+http://api.bigcommerce.com:80/admin.php
+https://account.bigcommerce.com/admin/login.php
+http://account.bigcommerce.com:80/mailer/admin/index.php
