@@ -62,7 +62,7 @@ func MultiRegex(inputFile string, patterns []string, outputFile string) error {
 		// fmt.Printf("[DEBUG] Compiling pattern: '%s'\n", p)
 		r, err := regexp.Compile(p)
 		if err != nil {
-			fmt.Printf("[!] Skipping invalid regex: %s\n", p)
+			// fmt.Printf("[!] Skipping invalid regex: %s\n", p)
 			continue
 		}
 		regexes = append(regexes, r)
