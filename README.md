@@ -36,7 +36,7 @@ Or download the prebuilt binary (coming soon 👀)
 ## 🧪 Usage
 
 ```bash
-./grepr -i urls.txt -f js,php -r admin.*,login
+./grepr -i urls.txt -f js,php -r admin.*,login -o output-file.txt
 ```
 
 ### ⚙️ Available Flags
@@ -116,14 +116,13 @@ You can set a custom output file using the `-o` or `--output` flag:
 ## 🖥 Example
 
 ```bash
-./grepr -i subdomains.txt -f js,php -r admin.*,login
+./grepr -i subdomains.txt -f js,php -r admin.*,login -o admin.txt
 ```
 
 Output:
 
 ```
-[✓] Filetype filtered results written to: output-filetypes-Grepr.txt (37 lines, 12.89 KB)
-[✓] Multi-regex filtered lines written to: output-regexes-Grepr.txt (11 lines, 4.21 KB)
+[✓] Regex filtered results written to: admin-Grepr.txt (37 lines, 12.89 KB)
 ```
 
 ---
