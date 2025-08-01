@@ -1,2 +1,50 @@
 text.txt
 output.txt
+output-keywords-Grepr.txt
+output-regex-Grepr.txt
+output-regexes-Grepr.txt
+All-Js-Grepr.txt
+All-Text-Grepr.txt
+Special-Files-Grepr.txt
+Special-Regex-Grepr.txt
+Special-Keywords-Grepr.txt
+Final-Grepr.txt
+
+# Binaries
+/grepr
+*.exe
+*.out
+*.dll
+*.so
+*.dylib
+
+# Build and dependency artifacts
+/bin/
+/build/
+/vendor/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Test result or coverage
+*.test
+*.coverprofile
+
+# Ignore all output files
+output.txt
+Final-Grepr.txt
+*-keywords.txt
+*-regex.txt
+*.filtered.txt

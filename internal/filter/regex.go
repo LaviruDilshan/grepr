@@ -61,7 +61,7 @@ func MultiRegex(inputFile string, patterns []string, outputFile string) error {
 	for _, p := range patterns {
 		r, err := regexp.Compile(p)
 		if err != nil {
-			fmt.Printf("[!] Invalid regex: %s\n", p)
+			fmt.Printf("[!] Skipping invalid regex: %s\n", p)
 			continue
 		}
 		regexes = append(regexes, r)
@@ -71,12 +71,50 @@ func MultiRegex(inputFile string, patterns []string, outputFile string) error {
 		line := scanner.Text()
 		for _, r := range regexes {
 			if r.MatchString(line) {
-				fmt.Printf("%v\n", line)
 				writer.WriteString(line + "\n")
+				fmt.Printf("%v\n", line)
 				break
 			}
 		}
 	}
 
+	if err := scanner.Err(); err != nil {
+		return fmt.Errorf("error reading input file: %v", err)
+	}
+
 	return writer.Flush()
+}
+
+// LoadRegexPatterns combines regexes from file and comma-separated list
+func LoadRegexPatterns(filePath, list string) ([]string, error) {
+	var patterns []string
+
+	// Load from file
+	if filePath != "" {
+		file, err := os.Open(filePath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to open regex file: %v", err)
+		}
+		defer file.Close()
+
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			line := scanner.Text()
+			if line != "" {
+				patterns = append(patterns, line)
+			}
+		}
+	}
+
+	// Load from comma-separated list
+	if list != "" {
+		split := regexp.MustCompile(`\s*,\s*`).Split(list, -1)
+		for _, item := range split {
+			if item != "" {
+				patterns = append(patterns, item)
+			}
+		}
+	}
+
+	return patterns, nil
 }

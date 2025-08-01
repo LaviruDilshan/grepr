@@ -11,7 +11,6 @@ func Run(input string) error {
 	txtOut := "All-Text-Grepr.txt"
 	extOut := "Special-Files-Grepr.txt"
 	regexOut := "Special-Regex-Grepr.txt"
-	keywordOut := "Special-Keywords-Grepr.txt"
 	finalOut := "Final-Grepr.txt"
 
 	// Step 1: JS filter
@@ -34,15 +33,8 @@ func Run(input string) error {
 	}
 	filter.MultiRegex(input, regexList, regexOut)
 
-	// Step 5: Keywords
-	keywords, err := filter.LoadLineFile("config/keywords.txt")
-	if err != nil {
-		return fmt.Errorf("keywords: %v", err)
-	}
-	filter.ByKeywords(input, keywords, keywordOut)
-
 	// Step 6: Merge + Dedupe
-	allFiles := []string{jsOut, txtOut, extOut, regexOut, keywordOut}
+	allFiles := []string{jsOut, txtOut, extOut, regexOut}
 	filter.MergeAndDedupe(allFiles, finalOut)
 
 	fmt.Println("[✓] Soora mode complete: Final-Grepr.txt generated.")

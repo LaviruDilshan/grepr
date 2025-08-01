@@ -1,1 +1,8 @@
 \\?
+admin
+dashboard
+internal
+secret
+development
+recent
+robots
