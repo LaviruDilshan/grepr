@@ -130,9 +130,9 @@ Output:
 ## 🔧 Developer Info
 
 * 👨‍💻 Developed by: Laviru Dilshan  
-* 🌐 GitHub: [github.com/LaviruD](https://github.com/LaviruDilshan)  
-* 💼 LinkedIn: [linkedin.com/in/laviru-dilshan](https://www.linkedin.com/in/LaviruDilshan)  
-* 🐦 X (Twitter): [x.com/laviru_dilshan](https://x.com/LaviruDilshan)  
+* 🌐 GitHub: [github.com/LaviruDilshan](https://github.com/LaviruDilshan)  
+* 💼 LinkedIn: [linkedin.com/in/LaviruDilshan](https://www.linkedin.com/in/LaviruDilshan)  
+* 🐦 X (Twitter): [x.com/LaviruDilshan](https://x.com/LaviruDilshan)  
 
 ---
 
