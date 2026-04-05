@@ -1,4 +1,4 @@
-module github.com/LaviruDilshan/grepr
+module github.com/LaviruDilshan/grepr/v2
 
 go 1.24.4
 

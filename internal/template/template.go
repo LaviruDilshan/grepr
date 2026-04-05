@@ -4,7 +4,7 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
-	"grepr/internal/filter"
+	"github.com/LaviruDilshan/grepr/v2/internal/filter"
 	"io/fs"
 	"os"
 	"path/filepath"

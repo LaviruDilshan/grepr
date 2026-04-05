@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"grepr/internal/banner"
-	"grepr/internal/filter"
-	"grepr/internal/soora"
-	"grepr/internal/template"
-	"grepr/internal/utils"
+	"github.com/LaviruDilshan/grepr/v2/internal/banner"
+	"github.com/LaviruDilshan/grepr/v2/internal/filter"
+	"github.com/LaviruDilshan/grepr/v2/internal/soora"
+	"github.com/LaviruDilshan/grepr/v2/internal/template"
+	"github.com/LaviruDilshan/grepr/v2/internal/utils"
 	"os"
 	"strings"
 	"time"

@@ -2,8 +2,8 @@ package soora
 
 import (
 	"fmt"
-	"grepr/internal/filter"
-	"grepr/internal/template"
+	"github.com/LaviruDilshan/grepr/v2/internal/filter"
+	"github.com/LaviruDilshan/grepr/v2/internal/template"
 	"os"
 	"path/filepath"
 	"strings"
