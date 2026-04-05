@@ -1,0 +1,33 @@
+{
+  "name": "debug_logic",
+  "description": "Debug Logic patterns",
+  "filetypes": [],
+  "patterns": [
+        "access=",
+        "admin=",
+        "dbg=",
+        "debug=",
+        "edit=",
+        "grant=",
+        "test=",
+        "alter=",
+        "clone=",
+        "create=",
+        "delete=",
+        "disable=",
+        "enable=",
+        "exec=",
+        "execute=",
+        "load=",
+        "make=",
+        "modify=",
+        "rename=",
+        "reset=",
+        "shell=",
+        "toggle=",
+        "adm=",
+        "root=",
+        "cfg=",
+        "config="
+]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "s3-buckets",
+  "description": "Amazon S3 bucket URLs",
+  "filetypes": [],
+  "patterns": [
+    "s3\\.amazonaws\\.com",
+    "s3-.*\\.amazonaws\\.com",
+    "amazonaws\\.com/s3"
+  ]
+}

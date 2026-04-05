@@ -1,0 +1,15 @@
+{
+  "name": "ssti",
+  "description": "Server-Side Template Injection patterns",
+  "filetypes": [],
+  "patterns": [
+    "template=",
+    "preview=",
+    "id=",
+    "view=",
+    "activity=",
+    "name=",
+    "content=",
+    "redirect="
+    ]
+}

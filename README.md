@@ -1,6 +1,6 @@
-# 🕵️‍♂️ Grepr
+# 🕵️‍♂️ Grepr v2.0.0
 
-Grepr is a blazing-fast, lightweight CLI tool designed for **URL filtering and recon**, built specifically for **bug bounty hunters**, **penetration testers**, and **automation workflows**. Inspired by the simplicity of `grep`, Grepr adds targeted intelligence to filter URLs by **file type**, **regex patterns**, or **super mode automation**.
+Grepr is a blazing-fast, lightweight CLI tool designed for **URL filtering and recon**, built specifically for **bug bounty hunters**, **penetration testers**, and **security researchers**. Inspired by the simplicity of `gf`, Grepr adds targeted intelligence to filter URLs by **file type**, **security templates**, or **super mode automation**.
 
 <p align="center">
   <img src="assets/grepr-demo.gif" alt="Grepr demo" width="600">
@@ -8,137 +8,127 @@ Grepr is a blazing-fast, lightweight CLI tool designed for **URL filtering and r
 
 ---
 
+## ✨ New in v2.0.0
+
+- 📂 **Template System (GF-style)**: Use predefined security templates like `sqli`, `xss`, `ssrf`, `s3-buckets`, etc.
+- 🚀 **Embedded Defaults**: Templates are now embedded in the binary. No more missing file errors!
+- 🖥 **Console-First Output**: Results print to console by default (perfect for piping). Use `-o` only when you need to save to a file.
+- 🧬 **Dynamic Soora Mode**: Automatically applies all security templates and core filters in one go.
+- 🎨 **Modern Banner**: A professional new look for your terminal.
+
+---
+
 ## ✨ Features
 
-- 🎯 Filter URLs by file types (e.g., `.js`, `.php`, `.aspx`, etc.)
-- 🔍 Filter lines using **multiple regex patterns** (from a list or file)
-- ⚡️ Soora Mode: Built-in **super filter engine** with curated rules (filetypes, keywords, regex)
-- 🪶 Lightweight, fast, and **easy to integrate** into any recon workflow
-- 📦 Clean output with **file stats** (line count, file size)
-- 💻 Written in Go, fully open-source
+- 🎯 **Filter by Filetype**: Targeted matching for extensions like `.js`, `.php`, `.aspx`, etc. (Smart enough to handle query params!).
+- 🔍 **Regex Filtering**: Filter lines using multiple regex patterns (from a list or file).
+- 📋 **Security Templates**: predefined patterns for common vulnerabilities (SQLi, XSS, SSRF, IDOR, LFI, RCE, etc.).
+- ⚡️ **Soora Mode**: The ultimate "Deep Scan" mode that runs every filter and template automatically.
+- 🪶 **Self-Contained**: Go-embedded templates mean the tool works anywhere without extra setup.
+- 📦 **Clean Stats**: Provides line counts and file sizes for all generated outputs.
 
 ---
 
 ## 📦 Installation
 
-Clone and build manually:
+### 1. Using Go Install (Recommended)
+This is the fastest way to install Grepr. It will download, compile, and install the binary directly to your `$GOPATH/bin`.
 
 ```bash
-git clone https://github.com/LaviruD/grepr.git
-cd grepr
-go build -o grepr
-````
+go install github.com/LaviruDilshan/grepr@latest
+```
 
-Or download the prebuilt binary (coming soon 👀)
+### 2. Build From Source
+If you want to contribute or build the binary manually, follow these steps:
+
+```bash
+# Clone the repository
+git clone https://github.com/LaviruDilshan/grepr.git
+
+# Navigate to the directory
+cd grepr
+
+# Build the binary
+go build -o grepr main.go
+
+# (Optional) Move to your local bin for global access
+sudo mv grepr /usr/local/bin/
+```
 
 ---
 
 ## 🧪 Usage
 
+### Basic Filtering (Console Output)
 ```bash
-./grepr -i urls.txt -f js,php -r admin.*,login -o output-file.txt
+grepr -i urls.txt -f js,php
 ```
 
-### ⚙️ Available Flags
+### Apply a Security Template
+```bash
+grepr -i urls.txt -t sqli
+```
 
-| Flag               | Description                                               |
-| ------------------ | --------------------------------------------------------- |
-| `-i, --input`      | **(Required)** Input file containing URLs                 |
-| `-o, --output`     | Output file name (default: `output.txt`)                  |
-| `-f, --filetypes`  | Comma-separated filetypes to filter (e.g., `js,php,aspx`) |
-| `-r, --regex-list` | Regex patterns (comma-separated, e.g., `admin.*,login`)   |
-| `--regex-file`     | File path containing regex patterns (one per line)        |
-| `-s, --soora`      | Enable **Soora Super Mode** for deep filtering            |
-| `-n, --nobanner`   | Disable the startup banner                                |
+### List Available Templates
+```bash
+grepr -l
+```
+
+### Save to File
+```bash
+grepr -i urls.txt -t xss -o results.txt
+```
+
+---
+
+## ⚙️ Available Flags
+
+| Flag                   | Description                                               |
+| ---------------------- | --------------------------------------------------------- |
+| `-i, --input`          | **(Required)** Input file containing URLs                 |
+| `-o, --output`         | Output file name (optional, prints to console if omitted) |
+| `-f, --filetypes`      | Comma-separated filetypes (e.g., `js,php,aspx`)           |
+| `-t, --template`       | Apply a predefined template (e.g., `sqli`, `xss`, `ssrf`) |
+| `-l, --list-templates` | List all available security templates                     |
+| `-r, --regex-list`     | Regex patterns (comma-separated, e.g., `admin.*,login`)   |
+| `--regex-file`         | File path containing regex patterns (one per line)        |
+| `-s, --soora`          | Enable **Soora Super Mode** (Applies ALL filters)         |
+| `-n, --nobanner`       | Disable the startup banner                                |
 
 ---
 
 ## 🧠 Soora Super Mode
 
-**Soora** is a built-in intelligent mode that performs deep filtering with minimal effort. It:
-
-* 🔎 Filters common sensitive file types like `.js`, `.txt`, `.env`, etc.
-* 🧬 Applies regex patterns to detect potential secrets and sensitive paths
-* 🧠 Searches for known keywords such as `admin`, `login`, `config`, `key`, etc.
-* 📂 Automatically generates intermediate results and merges them into a final deduplicated file
+**Soora** is the ultimate automated engine. When enabled, it performs a comprehensive scan by applying:
+1.  **Core Filters**: Extracts all `.js` and `.txt` files.
+2.  **Custom Configs**: Applies patterns from `config/extensions.txt` and `config/regex.txt`.
+3.  **Security Templates**: Runs **EVERY** available template (`sqli`, `xss`, `idor`, `lfi`, `rce`, `ssrf`, `ssti`, `redirect`, `s3-buckets`, `debug_logic`).
 
 ### 🛠️ Usage
-
 ```bash
-./grepr -i all-urls.txt -s
+grepr -i all-urls.txt -s
 ```
 
 ### 📁 Output Files
-
-Soora generates the following files during its filtering process:
-
-```
-[✓] Soora mode complete: All-Js-Grepr.txt generated.
-[✓] Soora mode complete: All-Text-Grepr.txt generated.
-[✓] Soora mode complete: Special-Files-Grepr.txt generated.
-[✓] Soora mode complete: Special-Regex-Grepr.txt generated.
-[✓] Soora mode complete: Final-Grepr.txt generated.
-```
-
-The final, deduplicated, and most filtered result will be available in:
-
+Soora generates individual files for each category and merges them into:
 ```
 📄 Final-Grepr.txt
 ```
 
 ---
 
-## 📂 Output Structure
-
-Each filter writes results into separate files for easier analysis:
-
-* `output-filetypes-Grepr.txt` – Matches based on selected file types
-* `output-regexes-Grepr.txt` – Matches using provided regex patterns
-* `Final-Grepr.txt` – *(Generated only in Soora Super Mode)* Final deduplicated result
-
-Each output file includes:
-
-* ✅ Total matched lines
-* 📦 Output file size (in KB)
-
-### 📝 Custom Output Path
-
-You can set a custom output file using the `-o` or `--output` flag:
-
-```bash
-./grepr -i input.txt -f js,php -o my-matches.txt
-```
-
-> 📌 Note: This applies to standard filtering. Soora Super Mode always generates predefined output files for clarity and consistency.
-
----
-
-## 🖥 Example
-
-```bash
-./grepr -i subdomains.txt -f js,php -r admin.*,login -o admin.txt
-```
-
-Output:
-
-```
-[✓] Regex filtered results written to: admin-Grepr.txt (37 lines, 12.89 KB)
-```
-
----
-
 ## 🔧 Developer Info
 
-* 👨‍💻 Developed by: Laviru Dilshan  
-* 🌐 GitHub: [github.com/LaviruDilshan](https://github.com/LaviruDilshan)  
-* 💼 LinkedIn: [linkedin.com/in/LaviruDilshan](https://www.linkedin.com/in/LaviruDilshan)  
-* 🐦 X (Twitter): [x.com/LaviruDilshan](https://x.com/LaviruDilshan)  
+* 👨‍💻 **Developer**: Laviru Dilshan  
+* 🏢 **Company**: Ovate Security  
+* 🌐 **Website**: [lavirudilshan.com](https://lavirudilshan.com)  
+* 🐦 **X (Twitter)**: [@LaviruDilshan](https://x.com/LaviruDilshan)  
 
 ---
 
 ## 🛡️ License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/LaviruD/grepr/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -146,5 +136,3 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 Found a bug or have an idea?
 Open an issue or reach out via socials. Contributions are welcome!
-
----

@@ -2,6 +2,7 @@ package filter
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"regexp"
 	"strings"
@@ -14,26 +15,35 @@ func ByFileType(input string, types []string, output string) error {
 	}
 	defer inFile.Close()
 
-	outFile, err := os.Create(output)
-	if err != nil {
-		return err
+	var writer *bufio.Writer
+	if output != "" {
+		outFile, err := os.Create(output)
+		if err != nil {
+			return err
+		}
+		defer outFile.Close()
+		writer = bufio.NewWriter(outFile)
 	}
-	defer outFile.Close()
 
-	writer := bufio.NewWriter(outFile)
 	scanner := bufio.NewScanner(inFile)
 
-	// Create regex like (\.js$|\.php$)
-	pattern := "\\.(" + strings.Join(types, "|") + ")$"
+	// Create regex like \.(js|php)($|\?|#)
+	pattern := "\\.(" + strings.Join(types, "|") + ")($|\\?|#)"
 	re := regexp.MustCompile("(?i)" + pattern)
 
 	for scanner.Scan() {
 		line := scanner.Text()
 		if re.MatchString(line) {
-			// fmt.Printf("%v\n", line)
-			writer.WriteString(line + "\n")
+			if writer != nil {
+				writer.WriteString(line + "\n")
+			} else {
+				fmt.Println(line)
+			}
 		}
 	}
 
-	return writer.Flush()
+	if writer != nil {
+		return writer.Flush()
+	}
+	return nil
 }
