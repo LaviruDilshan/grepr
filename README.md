@@ -35,7 +35,7 @@ Grepr is a blazing-fast, lightweight CLI tool designed for **URL filtering and r
 This is the fastest way to install Grepr. It will download, compile, and install the binary directly to your `$GOPATH/bin`.
 
 ```bash
-go install github.com/LaviruDilshan/grepr@latest
+go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@latest
 ```
 
 ### 2. Build From Source
