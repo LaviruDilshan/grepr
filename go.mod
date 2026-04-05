@@ -1,4 +1,4 @@
-module grepr
+module github.com/LaviruDilshan/grepr
 
 go 1.24.4
 
