@@ -3,64 +3,100 @@ package soora
 import (
 	"fmt"
 	"grepr/internal/filter"
+	"grepr/internal/template"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func Run(input string) error {
-	// Output file names
-	jsOut := "All-Js-Grepr.txt"
-	txtOut := "All-Text-Grepr.txt"
-	extOut := "Special-Files-Grepr.txt"
-	regexOut := "Special-Regex-Grepr.txt"
+	var outputFiles []string
 	finalOut := "Final-Grepr.txt"
 
-	// Step 1: JS filter
-	filter.ByFileType(input, []string{"js"}, jsOut)
-
-	// Step 2: TXT filter
-	filter.ByFileType(input, []string{"txt"}, txtOut)
-
-	// Step 3: Load extensions
-	extPath, err := getConfigPath("extensions.txt")
-	if err != nil {
-		return fmt.Errorf("extensions path: %v", err)
+	// --- Step 1: Original Core Filters ---
+	fmt.Println("[i] Running Core Filters...")
+	
+	// JS filter
+	jsOut := "All-Js-Grepr.txt"
+	if err := filter.ByFileType(input, []string{"js"}, jsOut); err == nil {
+		outputFiles = append(outputFiles, jsOut)
 	}
-	exts, err := filter.LoadLineFile(extPath)
-	if err != nil {
-		return fmt.Errorf("extensions load: %v", err)
-	}
-	filter.ByFileType(input, exts, extOut)
 
-	// Step 4: Load regex patterns
-	regexPath, err := getConfigPath("regex.txt")
-	if err != nil {
-		return fmt.Errorf("regex path: %v", err)
+	// TXT filter
+	txtOut := "All-Text-Grepr.txt"
+	if err := filter.ByFileType(input, []string{"txt"}, txtOut); err == nil {
+		outputFiles = append(outputFiles, txtOut)
 	}
-	regexList, err := filter.LoadLineFile(regexPath)
-	if err != nil {
-		return fmt.Errorf("regex load: %v", err)
+
+	// --- Step 2: Special Config Filters (extensions.txt / regex.txt) ---
+	
+	// Load extensions
+	extPath := getConfigPath("extensions.txt")
+	if exts, err := filter.LoadLineFile(extPath); err == nil && len(exts) > 0 {
+		extOut := "Special-Files-Grepr.txt"
+		if err := filter.ByFileType(input, exts, extOut); err == nil {
+			outputFiles = append(outputFiles, extOut)
+		}
 	}
-	filter.MultiRegex(input, regexList, regexOut)
 
-	// Step 6: Merge + Dedupe
-	allFiles := []string{jsOut, txtOut, extOut, regexOut}
-	filter.MergeAndDedupe(allFiles, finalOut)
+	// Load regex patterns
+	regexPath := getConfigPath("regex.txt")
+	if regexList, err := filter.LoadLineFile(regexPath); err == nil && len(regexList) > 0 {
+		regexOut := "Special-Regex-Grepr.txt"
+		if err := filter.MultiRegex(input, regexList, regexOut); err == nil {
+			outputFiles = append(outputFiles, regexOut)
+		}
+	}
 
-	// Output success messages
-	fmt.Println("[✓] Soora mode complete: All-Js-Grepr.txt generated.")
-	fmt.Println("[✓] Soora mode complete: All-Text-Grepr.txt generated.")
-	fmt.Println("[✓] Soora mode complete: Special-Files-Grepr.txt generated.")
-	fmt.Println("[✓] Soora mode complete: Special-Regex-Grepr.txt generated.")
-	fmt.Println("[✓] Soora mode complete: Final-Grepr.txt generated.")
+	// --- Step 3: Dynamic Template Filters ---
+	templates := template.List()
+	if len(templates) > 0 {
+		fmt.Printf("[i] Applying %d Security Templates...\n", len(templates))
+		for _, tName := range templates {
+			t, err := template.Load(tName)
+			if err != nil {
+				continue
+			}
+
+			outName := fmt.Sprintf("%s-Grepr.txt", strings.Title(tName))
+			err = t.Apply(input, outName)
+			if err != nil {
+				continue
+			}
+			outputFiles = append(outputFiles, outName)
+		}
+	}
+
+	// --- Step 4: Merge + Dedupe ---
+	fmt.Println("[i] Merging and deduplicating all results...")
+	err := filter.MergeAndDedupe(outputFiles, finalOut)
+	if err != nil {
+		return fmt.Errorf("merge failed: %v", err)
+	}
+
+	// Success Summary
+	fmt.Println("\n[✓] Soora mode summary of generated files:")
+	for _, file := range outputFiles {
+		if _, err := os.Stat(file); err == nil {
+			fmt.Printf("    → %s\n", file)
+		}
+	}
+	fmt.Printf("\n[✓] Soora Super Mode Complete: %s generated.\n", finalOut)
 
 	return nil
 }
 
-func getConfigPath(filename string) (string, error) {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
+func getConfigPath(filename string) string {
+	// Try local config first
+	localConfig := filepath.Join("config", filename)
+	if _, err := os.Stat(localConfig); err == nil {
+		return localConfig
 	}
-	return filepath.Join(home, ".config", "grepr", filename), nil
+
+	// Fallback to home config
+	home, err := os.UserHomeDir()
+	if err == nil {
+		return filepath.Join(home, ".config", "grepr", filename)
+	}
+	return ""
 }

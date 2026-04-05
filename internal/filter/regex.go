@@ -20,24 +20,33 @@ func ByRegex(input string, pattern string, output string) error {
 	}
 	defer inFile.Close()
 
-	outFile, err := os.Create(output)
-	if err != nil {
-		return err
+	var writer *bufio.Writer
+	if output != "" {
+		outFile, err := os.Create(output)
+		if err != nil {
+			return err
+		}
+		defer outFile.Close()
+		writer = bufio.NewWriter(outFile)
 	}
-	defer outFile.Close()
 
-	writer := bufio.NewWriter(outFile)
 	scanner := bufio.NewScanner(inFile)
 
 	for scanner.Scan() {
 		line := scanner.Text()
 		if re.MatchString(line) {
-			fmt.Printf("%v\n", line)
-			writer.WriteString(line + "\n")
+			if writer != nil {
+				writer.WriteString(line + "\n")
+			} else {
+				fmt.Println(line)
+			}
 		}
 	}
 
-	return writer.Flush()
+	if writer != nil {
+		return writer.Flush()
+	}
+	return nil
 }
 
 func MultiRegex(inputFile string, patterns []string, outputFile string) error {
@@ -47,22 +56,23 @@ func MultiRegex(inputFile string, patterns []string, outputFile string) error {
 	}
 	defer input.Close()
 
-	output, err := os.Create(outputFile)
-	if err != nil {
-		return fmt.Errorf("failed to create output file: %v", err)
+	var writer *bufio.Writer
+	if outputFile != "" {
+		output, err := os.Create(outputFile)
+		if err != nil {
+			return fmt.Errorf("failed to create output file: %v", err)
+		}
+		defer output.Close()
+		writer = bufio.NewWriter(output)
 	}
-	defer output.Close()
 
-	writer := bufio.NewWriter(output)
 	scanner := bufio.NewScanner(input)
 
 	// Compile all regex patterns
 	var regexes []*regexp.Regexp
 	for _, p := range patterns {
-		// fmt.Printf("[DEBUG] Compiling pattern: '%s'\n", p)
 		r, err := regexp.Compile(p)
 		if err != nil {
-			// fmt.Printf("[!] Skipping invalid regex: %s\n", p)
 			continue
 		}
 		regexes = append(regexes, r)
@@ -73,8 +83,11 @@ func MultiRegex(inputFile string, patterns []string, outputFile string) error {
 		matched := false
 		for _, r := range regexes {
 			if r.MatchString(line) {
-				// fmt.Printf("[MATCH] Line: %s | Regex: %s\n", line, r.String())
-				writer.WriteString(line + "\n")
+				if writer != nil {
+					writer.WriteString(line + "\n")
+				} else {
+					fmt.Println(line)
+				}
 				matched = true
 				break
 			}
@@ -88,7 +101,10 @@ func MultiRegex(inputFile string, patterns []string, outputFile string) error {
 		return fmt.Errorf("error reading input file: %v", err)
 	}
 
-	return writer.Flush()
+	if writer != nil {
+		return writer.Flush()
+	}
+	return nil
 }
 
 // LoadRegexPatterns combines regexes from file and comma-separated list

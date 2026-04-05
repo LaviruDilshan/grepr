@@ -1,0 +1,21 @@
+{
+  "name": "idor",
+  "description": "Insecure Direct Object Reference patterns",
+  "filetypes": [],
+  "patterns": [
+ "id=",
+ "user=",
+ "account=",
+ "number=",
+ "order=",
+ "no=",
+ "doc=",
+ "key=",
+ "email=",
+ "group=",
+ "profile=",
+ "edit=",
+ "report="
+ 
+ ]
+}
