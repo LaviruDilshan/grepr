@@ -14,28 +14,39 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Version information
+const Version = "2.1.1"
+
 var (
-	inputFile     string
-	fileTypes     string
-	outputFile    string
-	showBanner    bool
-	enableSoora   bool
-	regexFile     string
-	regexList     string
-	templateName  string
-	listTemplates bool
+	inputFile      string
+	fileTypes      string
+	outputFile     string
+	showBanner     bool
+	enableSoora    bool
+	regexFile      string
+	regexList      string
+	templateName   string
+	listTemplates  bool
+	showVersion    bool
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "Grepr",
+	Use:   "grepr",
 	Short: "Grepr - Lightweight URL filter tool for bug bounty hunters",
-	Long:  `Grepr v2.0.0 filters URLs by file types like .js, .php. Inspired by grep, built for automation.`,
+	Long:  `Grepr v` + Version + ` - Fast URL filtering with 24 security templates for bug bounty hunting.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if showVersion {
+			fmt.Printf("Grepr v%s\n", Version)
+			fmt.Println("24 embedded security templates")
+			fmt.Println("https://github.com/LaviruDilshan/grepr")
+			return
+		}
+
 		if listTemplates {
 			templates := template.List()
-			fmt.Println("Available Templates:")
+			fmt.Printf("Grepr v%s - Available Templates (%d):\n", Version, len(templates))
 			for _, t := range templates {
-				fmt.Printf("- %s\n", t)
+				fmt.Printf("  - %s\n", t)
 			}
 			return
 		}
@@ -158,6 +169,7 @@ func Execute() {
 	rootCmd.Flags().StringVar(&regexFile, "regex-file", "", "Path to file containing regex patterns")
 	rootCmd.Flags().StringVarP(&templateName, "template", "t", "", "Apply a predefined template (e.g., sqli, xss)")
 	rootCmd.Flags().BoolVarP(&listTemplates, "list-templates", "l", false, "List all available templates")
+	rootCmd.Flags().BoolVarP(&showVersion, "version", "v", false, "Show version information")
 
 	if err := rootCmd.Execute(); err != nil {
 		// fmt.Println(err)

@@ -1,4 +1,4 @@
-# 🕵️‍♂️ Grepr v2.0.0
+# 🕵️‍♂️ Grepr v2.1.1
 
 Grepr is a blazing-fast, lightweight CLI tool designed for **URL filtering and recon**, built specifically for **bug bounty hunters**, **penetration testers**, and **security researchers**. Inspired by the simplicity of `gf`, Grepr adds targeted intelligence to filter URLs by **file type**, **security templates**, or **super mode automation**.
 
@@ -8,13 +8,18 @@ Grepr is a blazing-fast, lightweight CLI tool designed for **URL filtering and r
 
 ---
 
-## ✨ New in v2.0.0
+## ✨ New in v2.1.1
 
-- 📂 **Template System (GF-style)**: Use predefined security templates like `sqli`, `xss`, `ssrf`, `s3-buckets`, etc.
-- 🚀 **Embedded Defaults**: Templates are now embedded in the binary. No more missing file errors!
-- 🖥 **Console-First Output**: Results print to console by default (perfect for piping). Use `-o` only when you need to save to a file.
-- 🧬 **Dynamic Soora Mode**: Automatically applies all security templates and core filters in one go.
-- 🎨 **Modern Banner**: A professional new look for your terminal.
+- 🔥 **24 Security Templates**: Comprehensive coverage for all major vulnerability classes
+- 🆕 **12 New Templates**: `oauth`, `jwt`, `graphql`, `api`, `xxe`, `cors`, `upload`, `secrets`, `websocket`, `cache`, `crlf`, `nosqli`
+- 📈 **3x More Patterns**: ~1,500+ patterns (up from ~350)
+- 🏷️ **Version Flag**: Use `grepr -v` to check your version
+- 🚀 **Embedded Defaults**: All templates are embedded in the binary
+
+### Previous in v2.0.0
+- 📂 **Template System (GF-style)**: Use predefined security templates
+- 🖥 **Console-First Output**: Results print to console by default
+- 🧬 **Dynamic Soora Mode**: Automatically applies all security templates
 
 ---
 
@@ -35,7 +40,11 @@ Grepr is a blazing-fast, lightweight CLI tool designed for **URL filtering and r
 This is the fastest way to install Grepr. It will download, compile, and install the binary directly to your `$GOPATH/bin`.
 
 ```bash
+# Install latest version
 go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@latest
+
+# Or install specific version (recommended for consistent results)
+go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@v2.1.1
 ```
 
 ### 2. Build From Source
@@ -49,10 +58,37 @@ git clone https://github.com/LaviruDilshan/grepr.git
 cd grepr
 
 # Build the binary
-go build -o grepr main.go
+go build -o grepr ./cmd/grepr/main.go
 
 # (Optional) Move to your local bin for global access
 sudo mv grepr /usr/local/bin/
+```
+
+### 🔧 Troubleshooting Installation
+
+If `go install @latest` doesn't give you the newest version (check with `grepr -v`), the Go module proxy may be caching an old version. Use one of these solutions:
+
+```bash
+# Solution 1: Install specific version tag
+go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@v2.1.1
+
+# Solution 2: Bypass the Go proxy cache
+GOPROXY=direct go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@latest
+
+# Solution 3: Build from source (always gets latest)
+git clone https://github.com/LaviruDilshan/grepr.git
+cd grepr
+go build -o grepr ./cmd/grepr/main.go
+sudo mv grepr /usr/local/bin/
+```
+
+Verify your installation:
+```bash
+grepr -v
+# Should show: Grepr v2.1.1
+
+grepr -l
+# Should show 24 templates
 ```
 
 ---
