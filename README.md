@@ -97,12 +97,56 @@ grepr -i urls.txt -t xss -o results.txt
 
 ---
 
+## 📋 Security Templates (v2.1.0)
+
+Grepr includes **24 comprehensive security templates** covering all major vulnerability classes:
+
+### Core Vulnerability Templates
+| Template | Description |
+|----------|-------------|
+| `sqli` | SQL Injection - database query parameters |
+| `xss` | Cross-Site Scripting - reflected/DOM parameters |
+| `ssrf` | Server-Side Request Forgery - URL fetch parameters |
+| `lfi` | Local File Inclusion - file path parameters |
+| `rce` | Remote Code Execution - command/code execution |
+| `ssti` | Server-Side Template Injection - template rendering |
+| `idor` | Insecure Direct Object Reference - object identifiers |
+| `redirect` | Open Redirect - redirection parameters |
+| `xxe` | XML External Entity - XML processing endpoints |
+| `nosqli` | NoSQL Injection - MongoDB/NoSQL parameters |
+| `crlf` | CRLF Injection - HTTP response splitting |
+
+### Authentication & Authorization
+| Template | Description |
+|----------|-------------|
+| `oauth` | OAuth/OIDC/SSO - authentication flow URLs |
+| `jwt` | JWT/Token - token-related parameters |
+| `secrets` | Secrets/Keys - credential leakage patterns |
+
+### API & Modern Web
+| Template | Description |
+|----------|-------------|
+| `api` | API Endpoints - REST/API URLs |
+| `graphql` | GraphQL - GraphQL endpoints and introspection |
+| `websocket` | WebSocket - WebSocket/real-time endpoints |
+| `cors` | CORS Misconfiguration - cross-origin patterns |
+
+### Infrastructure & Storage
+| Template | Description |
+|----------|-------------|
+| `s3-buckets` | Cloud Storage - S3, GCS, Azure Blob URLs |
+| `upload` | File Upload - upload functionality |
+| `cache` | Cache Poisoning - cache-related parameters |
+| `debug_logic` | Debug/Admin Logic - debug/privileged parameters |
+
+---
+
 ## 🧠 Soora Super Mode
 
 **Soora** is the ultimate automated engine. When enabled, it performs a comprehensive scan by applying:
 1.  **Core Filters**: Extracts all `.js` and `.txt` files.
 2.  **Custom Configs**: Applies patterns from `config/extensions.txt` and `config/regex.txt`.
-3.  **Security Templates**: Runs **EVERY** available template (`sqli`, `xss`, `idor`, `lfi`, `rce`, `ssrf`, `ssti`, `redirect`, `s3-buckets`, `debug_logic`).
+3.  **Security Templates**: Runs **ALL 24** security templates automatically.
 
 ### 🛠️ Usage
 ```bash
