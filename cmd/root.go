@@ -15,7 +15,7 @@ import (
 )
 
 // Version information
-const Version = "2.1.1"
+const Version = "2.1.2"
 
 var (
 	inputFile      string
