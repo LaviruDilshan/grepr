@@ -117,6 +117,31 @@ Soora generates individual files for each category and merges them into:
 
 ---
 
+## 🤖 OpenCode Skill
+
+Grepr includes an [OpenCode](https://opencode.ai) skill for AI-assisted URL filtering and reconnaissance. The skill provides complete command reference, usage examples, and workflow guidance.
+
+### Installation
+
+Copy the skill to your OpenCode skills directory:
+
+```bash
+mkdir -p ~/.config/opencode/skills/grepr
+cp .opencode/skills/grepr/SKILL.md ~/.config/opencode/skills/grepr/
+```
+
+Or add this repository's `.opencode/skills` to your OpenCode config:
+
+```jsonc
+{
+  "skills": ["path/to/grepr/.opencode/skills"]
+}
+```
+
+Once installed, invoke the skill with `@grepr` in OpenCode or let it auto-discover when working on URL filtering tasks.
+
+---
+
 ## 🔧 Developer Info
 
 * 👨‍💻 **Developer**: Laviru Dilshan  
