@@ -1,4 +1,4 @@
-# 🕵️‍♂️ Grepr v2.1.1
+# 🕵️‍♂️ Grepr v2.1.2
 
 Grepr is a blazing-fast, lightweight CLI tool designed for **URL filtering and recon**, built specifically for **bug bounty hunters**, **penetration testers**, and **security researchers**. Inspired by the simplicity of `gf`, Grepr adds targeted intelligence to filter URLs by **file type**, **security templates**, or **super mode automation**.
 
@@ -8,12 +8,17 @@ Grepr is a blazing-fast, lightweight CLI tool designed for **URL filtering and r
 
 ---
 
-## ✨ New in v2.1.1
+## ✨ New in v2.1.2
 
+- 🎯 **Precision Templates**: All patterns now require `?` or `&` prefix to match only query string parameters
+- 🚫 **No More Noise**: Eliminated false positives from tracking params (`utm_source`, `utm_campaign`, etc.)
+- 📉 **~90% Less Noise**: SSRF output reduced from 478 to ~10 URLs, SQLi from 3500+ to ~50-100
+- 🏷️ **Version Flag**: Use `grepr -v` to check your version
+
+### Previous in v2.1.0
 - 🔥 **24 Security Templates**: Comprehensive coverage for all major vulnerability classes
 - 🆕 **12 New Templates**: `oauth`, `jwt`, `graphql`, `api`, `xxe`, `cors`, `upload`, `secrets`, `websocket`, `cache`, `crlf`, `nosqli`
 - 📈 **3x More Patterns**: ~1,500+ patterns (up from ~350)
-- 🏷️ **Version Flag**: Use `grepr -v` to check your version
 - 🚀 **Embedded Defaults**: All templates are embedded in the binary
 
 ### Previous in v2.0.0
@@ -44,7 +49,7 @@ This is the fastest way to install Grepr. It will download, compile, and install
 go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@latest
 
 # Or install specific version (recommended for consistent results)
-go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@v2.1.1
+go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@v2.1.2
 ```
 
 ### 2. Build From Source
@@ -70,7 +75,7 @@ If `go install @latest` doesn't give you the newest version (check with `grepr -
 
 ```bash
 # Solution 1: Install specific version tag
-go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@v2.1.1
+go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@v2.1.2
 
 # Solution 2: Bypass the Go proxy cache
 GOPROXY=direct go install github.com/LaviruDilshan/grepr/v2/cmd/grepr@latest
@@ -85,7 +90,7 @@ sudo mv grepr /usr/local/bin/
 Verify your installation:
 ```bash
 grepr -v
-# Should show: Grepr v2.1.1
+# Should show: Grepr v2.1.2
 
 grepr -l
 # Should show 24 templates
@@ -133,7 +138,7 @@ grepr -i urls.txt -t xss -o results.txt
 
 ---
 
-## 📋 Security Templates (v2.1.0)
+## 📋 Security Templates (v2.1.2)
 
 Grepr includes **24 comprehensive security templates** covering all major vulnerability classes:
 
